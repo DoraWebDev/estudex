@@ -49,6 +49,7 @@ async function loginGoogle() {
 
 
 
+
 // Ações
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById('google-login-button')
