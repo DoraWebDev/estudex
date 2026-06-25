@@ -1,3 +1,14 @@
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyC7I5qlt_P5jI9OSvA-4xtcxRNbslZTxd8",
+  authDomain: "estudex-corporation.firebaseapp.com",
+  projectId: "estudex-corporation",
+  storageBucket: "estudex-corporation.firebasestorage.app",
+  messagingSenderId: "499791821676",
+  appId: "1:499791821676:web:f715037da2584936a45149",
+  measurementId: "G-L16EGZHEK6"
+};
+
 // Importações
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
