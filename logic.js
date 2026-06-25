@@ -58,7 +58,14 @@ function verificar_a_resposta(quest) {
 }
 
 
+  const tickets = document.querySelectorAll(".ticket-wrapper");
 
+  tickets.forEach((ticket, index) => {
+    ticket.addEventListener("click", () => {
+      console.log("Clicou no cartão:", index + 1);
+      console.log("Elemento:", ticket);
+    });
+  });
 
 
 configurar_os_buttons();
