@@ -54,7 +54,7 @@ async function real_login_do_Google(result) {
     
     // Redirecionar para home.html após login bem-sucedido
     console.log("Redirecionando para home.html...");
-    window.location.replace("home.html");
+    window.location.replace("./home.html");
     
   } catch (error) {
     console.error("Erro na autenticação:", error);
