@@ -31,11 +31,17 @@ async function debug_do_login_Google() {
     return result;
   } catch (error) {
     console.error("Erro na autenticação:", error);
+    throw error;
   }
 }
 
 async function real_login_do_Google(result) {
   try {
+    if (!result || !result.user) {
+      console.error("Resultado inválido:", result);
+      return;
+    }
+
     const user = result.user;
     const idToken = await user.getIdToken();
     
@@ -43,8 +49,12 @@ async function real_login_do_Google(result) {
     await salvar_usuario_no_banco(user);
     
     console.log("Login bem-sucedido!", user.email);
+    
     // Redirecionar para home.html após login bem-sucedido
-    window.location.href = "/home.html";
+    setTimeout(() => {
+      window.location.href = "home.html";
+    }, 500);
+    
   } catch (error) {
     console.error("Erro na autenticação:", error);
   }
@@ -53,7 +63,9 @@ async function real_login_do_Google(result) {
 async function loginGoogle() {
   try {
     const result = await debug_do_login_Google();
-    await real_login_do_Google(result);
+    if (result) {
+      await real_login_do_Google(result);
+    }
   } catch (error) {
     console.error("Erro no login do google:", error);
   }
@@ -73,6 +85,7 @@ async function salvar_usuario_no_banco(user) {
     console.log("Usuário salvo no banco de dados");
   } catch (error) {
     console.error("Erro ao salvar usuário:", error);
+    // Mesmo com erro na DB, continua com o login
   }
 }
 
