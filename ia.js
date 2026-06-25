@@ -65,6 +65,7 @@ async function pegar_os_resumos() {
     "/resumos/matematica_setor_A",
     "/resumos/matematica_setor_B",
   ];
+  
 
   const promessas = caminhos.map(c => db.ref(c).once("value"));
   const snapshots = await Promise.all(promessas);
