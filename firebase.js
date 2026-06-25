@@ -22,6 +22,7 @@ const auth = getAuth(fonte_dos_recursos); // Tem que ser carregado em type="modu
 const db = getDatabase(fonte_dos_recursos); // Realtime Database
 const provedor_da_Auth_Google = new GoogleAuthProvider();
 
+let loginEmProgresso = false;
 
 // Funções de Autenticação
 async function debug_do_login_Google() {
@@ -52,16 +53,19 @@ async function real_login_do_Google(result) {
     console.log("Login bem-sucedido!", user.email);
     
     // Redirecionar para home.html após login bem-sucedido
-    setTimeout(() => {
-      window.location.href = "home.html";
-    }, 500);
+    console.log("Redirecionando para home.html...");
+    window.location.replace("home.html");
     
   } catch (error) {
     console.error("Erro na autenticação:", error);
+    loginEmProgresso = false;
   }
 }
 
 async function loginGoogle() {
+  if (loginEmProgresso) return; // Previne múltiplos cliques
+  loginEmProgresso = true;
+  
   try {
     const result = await debug_do_login_Google();
     if (result) {
@@ -69,6 +73,7 @@ async function loginGoogle() {
     }
   } catch (error) {
     console.error("Erro no login do google:", error);
+    loginEmProgresso = false;
   }
 }
 
@@ -134,12 +139,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// Verificar se já está autenticado ao carregar a página
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    console.log("Usuário autenticado:", user);
+  if (user && !loginEmProgresso) {
+    console.log("Usuário já autenticado:", user);
     // Ler dados do usuário quando autenticado
     await ler_dados_usuario(user.uid);
-  } else {
+  } else if (!user) {
     console.log("Nenhum usuário autenticado.");
   }
 });
