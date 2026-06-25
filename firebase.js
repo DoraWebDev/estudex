@@ -13,15 +13,16 @@ const firebaseConfig = {
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 import {GoogleAuthProvider, signInWithPopup, signOut} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-
+import {getDatabase, ref, set, get, update} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
 // Variáveis
 const fonte_dos_recursos = initializeApp(firebaseConfig);
 const auth = getAuth(fonte_dos_recursos); // Tem que ser carregado em type="module"
+const db = getDatabase(fonte_dos_recursos); // Realtime Database
 const provedor_da_Auth_Google = new GoogleAuthProvider();
 
 
-// Funções
+// Funções de Autenticação
 async function debug_do_login_Google() {
   try {
     const result = await signInWithPopup(auth, provedor_da_Auth_Google);
@@ -35,13 +36,15 @@ async function debug_do_login_Google() {
 
 async function real_login_do_Google(result) {
   try {
-    const idToken = await result.user.getIdToken();
-    await fetch("/api/protegida", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${idToken}`
-      }
-    });
+    const user = result.user;
+    const idToken = await user.getIdToken();
+    
+    // Salvar dados do usuário no Realtime Database
+    await salvar_usuario_no_banco(user);
+    
+    console.log("Login bem-sucedido!", user.email);
+    // Redirecionar para home.html após login bem-sucedido
+    window.location.href = "/home.html";
   } catch (error) {
     console.error("Erro na autenticação:", error);
   }
@@ -56,19 +59,76 @@ async function loginGoogle() {
   }
 }
 
+// Funções do Realtime Database
+async function salvar_usuario_no_banco(user) {
+  try {
+    const userRef = ref(db, 'usuarios/' + user.uid);
+    await set(userRef, {
+      uid: user.uid,
+      email: user.email,
+      nome: user.displayName,
+      foto: user.photoURL,
+      dataLogin: new Date().toISOString()
+    });
+    console.log("Usuário salvo no banco de dados");
+  } catch (error) {
+    console.error("Erro ao salvar usuário:", error);
+  }
+}
 
+async function ler_dados_usuario(userId) {
+  try {
+    const userRef = ref(db, 'usuarios/' + userId);
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      console.log("Dados do usuário:", snapshot.val());
+      return snapshot.val();
+    } else {
+      console.log("Nenhum dado encontrado para este usuário");
+      return null;
+    }
+  } catch (error) {
+    console.error("Erro ao ler dados do usuário:", error);
+  }
+}
 
+async function atualizar_dados_usuario(userId, dados) {
+  try {
+    const userRef = ref(db, 'usuarios/' + userId);
+    await update(userRef, dados);
+    console.log("Dados do usuário atualizados");
+  } catch (error) {
+    console.error("Erro ao atualizar dados do usuário:", error);
+  }
+}
+
+async function salvar_questao_respondida(userId, questaoData) {
+  try {
+    const questaoRef = ref(db, 'usuarios/' + userId + '/questoes/' + Date.now());
+    await set(questaoRef, questaoData);
+    console.log("Questão salva no banco de dados");
+  } catch (error) {
+    console.error("Erro ao salvar questão:", error);
+  }
+}
 
 // Ações
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById('FazerLoginComGoogle')
-    .addEventListener('click', loginGoogle);
+  const botaoLogin = document.getElementById('FazerLoginComGoogle');
+  if (botaoLogin) {
+    botaoLogin.addEventListener('click', loginGoogle);
+  }
 });
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("Usuário autenticado:", user);
+    // Ler dados do usuário quando autenticado
+    await ler_dados_usuario(user.uid);
   } else {
     console.log("Nenhum usuário autenticado.");
   }
 });
+
+// Exportar funções para uso em outros arquivos
+export { db, auth, ler_dados_usuario, atualizar_dados_usuario, salvar_questao_respondida };
