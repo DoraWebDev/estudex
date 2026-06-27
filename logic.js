@@ -6,6 +6,16 @@ document.getElementById("escolha-certa").style.display = "none";
 document.getElementById("escolha-errada").style.display = "none";
 
 
+function resetarEstado() {
+  document.getElementById("escolha-certa").style.display = "none";
+  document.getElementById("escolha-errada").style.display = "none";
+  const div_da_explication = document.getElementById("explication");
+  div_da_explication.style.display = "none";
+  div_da_explication.innerText = "";
+}
+
+
+
 async function configurar_os_buttons() {
   const resumos = await pegar_os_resumos();
 

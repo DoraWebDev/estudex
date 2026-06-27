@@ -7,30 +7,25 @@ import {pipeline} from "@xenova/transformers";
 const generator = await pipeline("text-generation", "Xenova/Qwen2-0.5B-Instruct");
 
 async function gerar_a_quest(resumo) {
-  const prompt = `
-  Crie uma questão de múltipla escolha no seguinte formato:
+  try {
+    const response = await fetch("https://seu-dominio.com/gerarQuestao", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer SEU_TOKEN" 
+      },
+      body: JSON.stringify({ resumo }),
+    });
 
-  Pergunta: [texto da pergunta]
-  Alternativas:
-  A) [alternativa A]
-  B) [alternativa B]
-  C) [alternativa C]
-  D) [alternativa D]
-  Resposta: [letra da resposta correta]
-  Explicação: [texto explicando a resposta]
-
-  Resumo:
-  ${resumo}
-`;
-  const output = await generator(prompt, {
-    max_new_tokens: 120,
-    min_new_tokens: 50,
-    temperature: 0.7,
-    top_k: 50,
-    top_p: 0.9,
-  });
-  return output[0].generated_text;
+    const data = await response.json();
+    return data.textoGerado || "";
+  } catch (err) {
+    console.error("Erro ao conectar ao VPS:", err);
+    return "Erro ao gerar questão.";
+  }
 }
+
+
 
 
 
