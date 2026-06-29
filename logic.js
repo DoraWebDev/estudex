@@ -22,9 +22,9 @@ async function configurar_os_buttons() {
   resumos.forEach((resumo, index) => {
     const playButton = document.getElementById(`playButton${index + 1}`);
     playButton.addEventListener("click", async () => {
-      // Gera questão com base no resumo
       const textoGerado = await gerar_a_quest(resumo);
       const quest = parse_da_quest(textoGerado);
+
 
       if (!quest || !quest.pergunta || !quest.alternativas || quest.alternativas.length < 4 || !quest.respostaCorreta) {
         console.error("Questão inválida ou parser falhou:", quest);
@@ -32,10 +32,8 @@ async function configurar_os_buttons() {
         return;
       }
 
-      // Mostra pergunta
-      document.getElementById("pergunta").innerText = quest.pergunta;
 
-      // Mostrar Alternativas
+      document.getElementById("pergunta").innerText = quest.pergunta;
       document.querySelector("#alternativa_A + .checkbox-tile .checkbox-label").innerText = `A) ${quest.alternativas[0]}`;
       document.querySelector("#alternativa_B + .checkbox-tile .checkbox-label").innerText = `B) ${quest.alternativas[1]}`;
       document.querySelector("#alternativa_C + .checkbox-tile .checkbox-label").innerText = `C) ${quest.alternativas[2]}`;
@@ -46,6 +44,9 @@ async function configurar_os_buttons() {
     });
   });
 }
+
+
+
 
 function verificar_a_resposta(quest) {
   const alternativasIds = ["alternativa_A", "alternativa_B", "alternativa_C", "alternativa_D"];
@@ -78,4 +79,4 @@ function verificar_a_resposta(quest) {
   });
 
 
-configurar_os_buttons();
+
