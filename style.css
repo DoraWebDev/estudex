@@ -49,11 +49,12 @@ button:hover {
 
 .logo-topo {
   width: 300px;
-  display: inline-block;
-  margin-left: 38.5%;
-  margin-right: 30%;
-
+  display: block;
+  margin: 20px auto;  
+  grid-column: 1 / -1; 
 }
+
+
 #FazerLoginComGoogle {
   display: block;
   margin-left: 41%;
