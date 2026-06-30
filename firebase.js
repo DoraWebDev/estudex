@@ -7,7 +7,7 @@ const firebaseConfig = {
   messagingSenderId: "499791821676",
   appId: "1:499791821676:web:f715037da2584936a45149",
   measurementId: "G-L16EGZHEK6",
-  databaseURL: "https://estudex-corporation-default-rtdb.firebaseio.com/" // corrigido
+  // databaseURL: "https://estudex-corporation-default-rtdb.firebaseio.com/"
 };
 
 
