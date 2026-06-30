@@ -4,6 +4,12 @@ import {db} from "./firebase.js";
 
 document.getElementById("escolha-certa").style.display = "none";
 document.getElementById("escolha-errada").style.display = "none";
+document.querySelector(".loader-wrapper").style.display = "none"; 
+
+
+
+
+
 
 
 function resetarEstado() {
@@ -13,6 +19,9 @@ function resetarEstado() {
   div_da_explication.style.display = "none";
   div_da_explication.innerText = "";
 }
+
+
+
 
 
 
@@ -69,12 +78,14 @@ function verificar_a_resposta(quest) {
 }
 
 
+
   const tickets = document.querySelectorAll(".ticket-wrapper");
 
   tickets.forEach((ticket, index) => {
     ticket.addEventListener("click", () => {
       console.log("Clicou no cartão:", index + 1);
       console.log("Elemento:", ticket);
+      document.querySelector(".loader-wrapper").style.display = "flex"; 
     });
   });
 
