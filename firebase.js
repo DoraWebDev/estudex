@@ -142,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Usuário já autenticado, redirecionando...");
         window.location.replace("./home.html");
       } else {
+        console.log("Esperando o login google");
         await loginGoogle();
       }
     });
