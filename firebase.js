@@ -3,12 +3,13 @@ const firebaseConfig = {
   apiKey: "AIzaSyC7I5qlt_P5jI9OSvA-4xtcxRNbslZTxd8",
   authDomain: "estudex-corporation.firebaseapp.com",
   projectId: "estudex-corporation",
-  storageBucket: "estudex-corporation.firebasestorage.app",
+  storageBucket: "estudex-corporation.appspot.com", // corrigido
   messagingSenderId: "499791821676",
   appId: "1:499791821676:web:f715037da2584936a45149",
   measurementId: "G-L16EGZHEK6",
-  databaseURL: "https://estudex-corporation-default-rtdb.firebaseio.com"
+  databaseURL: "https://estudex-corporation-default-rtdb.firebaseio.com/" // corrigido
 };
+
 
 // Importações
 import {initializeApp} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -54,7 +55,7 @@ async function real_login_do_Google(result) {
     
     // Redirecionar para home.html após login bem-sucedido
     console.log("Redirecionando para home.html...");
-    window.location.replace("./home.html");
+    window.location.replace("/home.html");
     
   } catch (error) {
     console.error("Erro na autenticação:", error);
