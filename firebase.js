@@ -136,9 +136,18 @@ async function salvar_questao_respondida(userId, questaoData) {
 document.addEventListener("DOMContentLoaded", () => {
   const botaoLogin = document.getElementById('FazerLoginComGoogle');
   if (botaoLogin) {
-    botaoLogin.addEventListener('click', loginGoogle);
+    botaoLogin.addEventListener('click', async () => {
+      const user = auth.currentUser;
+      if (user) {
+        console.log("Usuário já autenticado, redirecionando...");
+        window.location.replace("./home.html");
+      } else {
+        await loginGoogle();
+      }
+    });
   }
 });
+
 
 
 
