@@ -140,16 +140,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
+
+
+
+
 // Verificar se já está autenticado ao carregar a página
 onAuthStateChanged(auth, async (user) => {
-  if (user && !loginEmProgresso) {
+  if (user) {
     console.log("Usuário já autenticado:", user);
     // Ler dados do usuário quando autenticado
     await ler_dados_usuario(user.uid);
-  } else if (!user) {
+
+    // Redirecionar automaticamente se já estiver logado
+    if (window.location.pathname.endsWith("index.html")) {
+      window.location.replace("./home.html");
+    }
+  } else {
     console.log("Nenhum usuário autenticado.");
   }
 });
+
 
 // Exportar funções para uso em outros arquivos
 export { db, auth, ler_dados_usuario, atualizar_dados_usuario, salvar_questao_respondida };
